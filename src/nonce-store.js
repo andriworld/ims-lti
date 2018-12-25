@@ -1,26 +1,30 @@
 class NonceStore {
-
   constructor() {
     this.isNew = this.isNew.bind(this);
     this.setUsed = this.setUsed.bind(this);
   }
 
-  isNonceStore() { return true; }
+  isNonceStore() {
+    return true;
+  }
 
-  isNew(){
+  isNew() {
     for (let i in arguments) {
       const arg = arguments[i];
-      if (typeof arg === 'function') { return arg(new Error("NOT IMPLEMENTED"), false); }
+      if (typeof arg === 'function') {
+        return arg(new Error('NOT IMPLEMENTED'), false);
+      }
     }
   }
 
-  setUsed(){
+  setUsed() {
     for (let i in arguments) {
       const arg = arguments[i];
-      if (typeof arg === 'function') { return arg(new Error("NOT IMPLEMENTED"), false); }
+      if (typeof arg === 'function') {
+        return arg(new Error('NOT IMPLEMENTED'), false);
+      }
     }
   }
 }
-
 
 module.exports = NonceStore;

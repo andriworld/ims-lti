@@ -53,5 +53,5 @@ module.exports = {
   ParameterError,
   SignatureError,
   NonceError,
-  OutcomeResponseError
+  OutcomeResponseError,
 };

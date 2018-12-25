@@ -11,16 +11,22 @@ const NonceStore = require('./nonce-store');
 const EXPIRE_IN_SEC = 5 * 60;
 
 class MemoryNonceStore extends NonceStore {
-
   constructor() {
     super();
     this.used = Object.create(null);
   }
 
-  isNew(nonce, timestamp, next){
-
-    if (next == null) { next = function(){}; }
-    if ((typeof nonce === 'undefined') || (nonce === null) || (typeof nonce === 'function') || (typeof timestamp === 'function') || (typeof timestamp === 'undefined')) {
+  isNew(nonce, timestamp, next) {
+    if (next == null) {
+      next = function() {};
+    }
+    if (
+      typeof nonce === 'undefined' ||
+      nonce === null ||
+      typeof nonce === 'function' ||
+      typeof timestamp === 'function' ||
+      typeof timestamp === 'undefined'
+    ) {
       return next(new Error('Invalid parameters'), false);
     }
 
@@ -33,11 +39,11 @@ class MemoryNonceStore extends NonceStore {
     }
 
     return this.setUsed(nonce, timestamp, function() {
-      if ((typeof timestamp !== 'undefined') && (timestamp !== null)) {
+      if (typeof timestamp !== 'undefined' && timestamp !== null) {
         timestamp = parseInt(timestamp, 10);
         const currentTime = Math.round(Date.now() / 1000);
 
-        const timestampIsFresh = (currentTime - timestamp) <= EXPIRE_IN_SEC;
+        const timestampIsFresh = currentTime - timestamp <= EXPIRE_IN_SEC;
 
         if (timestampIsFresh) {
           return next(null, true);
@@ -50,8 +56,10 @@ class MemoryNonceStore extends NonceStore {
     });
   }
 
-  setUsed(nonce, timestamp, next){
-    if (next == null) { next = function(){}; }
+  setUsed(nonce, timestamp, next) {
+    if (next == null) {
+      next = function() {};
+    }
     this.used[nonce] = timestamp + EXPIRE_IN_SEC;
     return next(null);
   }
@@ -61,11 +69,11 @@ class MemoryNonceStore extends NonceStore {
 
     for (let nonce in this.used) {
       const expiry = this.used[nonce];
-      if (expiry <= now) { delete this.used[nonce]; }
+      if (expiry <= now) {
+        delete this.used[nonce];
+      }
     }
-
   }
 }
-
 
 module.exports = MemoryNonceStore;

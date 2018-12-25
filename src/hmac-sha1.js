@@ -1,13 +1,6 @@
-/*
- * decaffeinate suggestions:
- * DS101: Remove unnecessary use of Array.from
- * DS102: Remove unnecessary code created because of implicit returns
- * Full docs: https://github.com/decaffeinate/decaffeinate/blob/master/docs/suggestions.md
- */
-const crypto    = require('crypto');
-const url       = require('url');
-const utils     = require('./utils');
-
+const crypto = require('crypto');
+const url = require('url');
+const utils = require('./utils');
 
 // Cleaning invloves:
 //   stripping the oauth_signature from the params
@@ -18,26 +11,28 @@ const utils     = require('./utils');
 //
 // Returns a string representing the request
 const _clean_request_body = function(body, query) {
-
   const out = [];
 
   const encodeParam = (key, val) => `${key}=${utils.special_encode(val)}`;
 
   const cleanParams = function(params) {
-    if (typeof params !== 'object') { return; }
+    if (typeof params !== 'object') {
+      return;
+    }
 
     for (let key in params) {
       const vals = params[key];
-      if (key === 'oauth_signature') { continue; }
+      if (key === 'oauth_signature') {
+        continue;
+      }
       if (Array.isArray(vals) === true) {
-        for (let val of Array.from(vals)) {
+        for (let val of vals) {
           out.push(encodeParam(key, val));
         }
       } else {
         out.push(encodeParam(key, vals));
       }
     }
-
   };
 
   cleanParams(body);
@@ -46,19 +41,23 @@ const _clean_request_body = function(body, query) {
   return utils.special_encode(out.sort().join('&'));
 };
 
-
-
 class HMAC_SHA1 {
-
   toString() {
     return 'HMAC_SHA1';
   }
 
-  build_signature_raw(req_url, parsed_url, method, params, consumer_secret, token) {
+  build_signature_raw(
+    req_url,
+    parsed_url,
+    method,
+    params,
+    consumer_secret,
+    token
+  ) {
     const sig = [
       method.toUpperCase(),
       utils.special_encode(req_url),
-      _clean_request_body(params, parsed_url.query)
+      _clean_request_body(params, parsed_url.query),
     ];
 
     return this.sign_string(sig.join('&'), consumer_secret, token);
@@ -83,17 +82,29 @@ class HMAC_SHA1 {
       protocol = (encrypted && 'https') || 'http';
     }
 
-    const parsedUrl  = url.parse(originalUrl, true);
-    const hitUrl     = protocol + '://' + req.headers.host + parsedUrl.pathname;
+    const parsedUrl = url.parse(originalUrl, true);
+    const hitUrl = protocol + '://' + req.headers.host + parsedUrl.pathname;
 
-    return this.build_signature_raw(hitUrl, parsedUrl, req.method, body, consumer_secret, token);
+    return this.build_signature_raw(
+      hitUrl,
+      parsedUrl,
+      req.method,
+      body,
+      consumer_secret,
+      token
+    );
   }
 
   sign_string(str, key, token) {
     key = `${key}&`;
-    if (token) { key += token; }
+    if (token) {
+      key += token;
+    }
 
-    return crypto.createHmac('sha1', key).update(str).digest('base64');
+    return crypto
+      .createHmac('sha1', key)
+      .update(str)
+      .digest('base64');
   }
 }
 
