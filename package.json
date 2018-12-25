@@ -29,12 +29,15 @@
   "bugs": {
     "url": "http://github.com/omsmith/ims-lti/issues"
   },
+  "files": [
+    "src"
+  ],
   "main": "./src/ims-lti",
   "scripts": {
     "coverage": "nyc report --reporter=text-lcov | coveralls",
     "lint": "eslint .",
     "test": "nyc mocha --exit",
-    "prettier": "prettier --write --trailing-comma es5 --single-quote ./src/**/*"
+    "prettier": "prettier --write --trailing-comma es5 --single-quote ./src"
   },
   "dependencies": {
     "xml2js": "^0.4.19",
