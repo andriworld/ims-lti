@@ -72,8 +72,8 @@ class HMAC_SHA1 {
     let originalUrl = req.originalUrl || req.url;
     let { protocol } = req;
 
-    // Since canvas includes query parameters in the body we can omit the query string
-    if (body.tool_consumer_info_product_family_code === 'canvas') {
+    // Since canvas/schoology includes query parameters in the body we can omit the query string
+    if (body.tool_consumer_info_product_family_code === 'canvas' || body.tool_consumer_info_product_family_code == 'schoology') {
       originalUrl = url.parse(originalUrl).pathname;
     }
 
