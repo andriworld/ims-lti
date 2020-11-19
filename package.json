@@ -1,6 +1,6 @@
 {
   "name": "@annoto/ims-lti",
-  "version": "3.0.2",
+  "version": "3.0.3",
   "description": "Module for building an LTI Tool Provider and accept LTI launch requests",
   "author": {
     "name": "James Rundquist",
