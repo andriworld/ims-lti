@@ -81,6 +81,10 @@ class OutcomeDocument {
     return this._add_payload('url', url);
   }
 
+  add_lti_launch_url(ltiLaunchUrl) {
+    return this._add_payload('ltiLaunchUrl', ltiLaunchUrl);
+  }
+
   finalize() {
     return this.doc.end({ pretty: true });
   }
@@ -177,6 +181,24 @@ class OutcomeService {
     }
   }
 
+  send_replace_result_with_lti_launch_url(score, ltiLaunchUrl, callback) {
+    const doc = new OutcomeDocument(
+      this.REQUEST_REPLACE,
+      this.source_did,
+      this
+    );
+    
+    try {
+      if (score != null) {
+        doc.add_score(score, this.language);
+      }
+      doc.add_lti_launch_url(ltiLaunchUrl);
+      return this._send_request(doc, callback);
+    } catch (err) {
+      return callback(err, false);
+    }
+  }
+
   send_read_result(callback) {
     const doc = new OutcomeDocument(this.REQUEST_READ, this.source_did, this);
     return this._send_request(doc, (err, result, xml) => {
@@ -211,7 +233,8 @@ class OutcomeService {
   supports_result_data(type) {
     return (
       this.result_data_types.length &&
-      (!type || this.result_data_types.indexOf(type) !== -1)
+      (!type || this.result_data_types.indexOf(type) !== -1
+      || type === 'ltiLaunchUrl' && this.result_data_types.indexOf('url') !== -1)
     );
   }
 
