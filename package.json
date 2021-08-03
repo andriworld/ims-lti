@@ -30,7 +30,8 @@
     "url": "http://github.com/omsmith/ims-lti/issues"
   },
   "files": [
-    "src"
+    "src",
+    "./index.d.ts"
   ],
   "types": "./index.d.ts",
   "main": "./src/ims-lti",
