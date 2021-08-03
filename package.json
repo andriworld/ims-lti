@@ -32,6 +32,7 @@
   "files": [
     "src"
   ],
+  "types": "./index.d.ts",
   "main": "./src/ims-lti",
   "scripts": {
     "coverage": "nyc report --reporter=text-lcov | coveralls",
